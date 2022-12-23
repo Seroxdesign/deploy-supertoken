@@ -1,11 +1,36 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
+import supertoken_factory from '../constants/ABIs/supertoken_factory.json';
+import { supertoken_factory_polygon_proxy } from '../constants/addresses';
+import { useContract } from 'wagmi'
+import { useContractWrite, usePrepareContractWrite } from 'wagmi'
+
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+
+  const { config } = usePrepareContractWrite({
+    address: supertoken_factory_polygon_proxy,
+    abi: supertoken_factory,
+    functionName: 'createERC20Wrapper',
+    args: ['0xE3322702BEdaaEd36CdDAb233360B939775ae5f1', 1, 'Super Tellor Tribute', 'TRBx'],
+  })
+
+  const { data, isLoading, isSuccess, write } = useContractWrite(config)
+
+  const contract = useContract({
+    address: supertoken_factory_polygon_proxy,
+    abi: supertoken_factory,
+  })
+
+  const deploySupertoken = () => {
+    write?.();
+  }
+
+  console.log('mumbai deploy', contract);
+
   return (
     <>
       <Head>
@@ -23,6 +48,10 @@ export default function Home() {
 
         <div className={styles.center}>
           Deploy Your Supertoken
+
+          <button onClick={deploySupertoken}>
+            Deploy Supertoken
+          </button>
         </div>
 
         <div className={styles.grid}>
