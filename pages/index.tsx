@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import Head from 'next/head'
 import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
@@ -11,7 +12,14 @@ const inter = Inter({ subsets: ['latin'] })
 export default function Home() {
   const { chain, chains } = useNetwork()
 
-  const contract = getNetworkContract(chain ? chain.id : 1);
+  const [contract, setContract] = useState<string | undefined>();
+  const [chainId, setChainId] = useState<number | undefined>();
+  
+  useEffect(() => {
+    const contractAddress = getNetworkContract(chain?.id!);
+    setChainId(chain?.id!);
+    setContract(contractAddress);
+  }, [chain])
 
   const { config } = usePrepareContractWrite({
     address: contract,
@@ -39,7 +47,7 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         {
-          chain ?
+          chainId ?
           ''
           :
           <div className={styles.description}>
