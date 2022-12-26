@@ -77,6 +77,7 @@
   justify-content: center;
   align-items: center;
   position: relative;
+  flex-direction: column;
   padding: 4rem 0;
 }
 

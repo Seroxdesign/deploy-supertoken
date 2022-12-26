@@ -1,18 +1,20 @@
 import Head from 'next/head'
 import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
+import { getNetworkContract } from '../utils/getNetworkContract';
 import supertoken_factory from '../constants/ABIs/supertoken_factory.json';
-import { supertoken_factory_polygon_proxy } from '../constants/addresses';
-import { useContract } from 'wagmi'
-import { useContractWrite, usePrepareContractWrite } from 'wagmi'
-
+import { useContractWrite, usePrepareContractWrite, useNetwork } from 'wagmi'
+import DeploySupertoken from '../components/forms/DeploySupertoken';
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  const { chain, chains } = useNetwork()
+
+  const contract = getNetworkContract(chain ? chain.id : 1);
 
   const { config } = usePrepareContractWrite({
-    address: supertoken_factory_polygon_proxy,
+    address: contract,
     abi: supertoken_factory,
     functionName: 'createERC20Wrapper',
     args: ['0xE3322702BEdaaEd36CdDAb233360B939775ae5f1', 1, 'Super Tellor Tribute', 'TRBx'],
@@ -20,16 +22,12 @@ export default function Home() {
 
   const { data, isLoading, isSuccess, write } = useContractWrite(config)
 
-  const contract = useContract({
-    address: supertoken_factory_polygon_proxy,
-    abi: supertoken_factory,
-  })
-
   const deploySupertoken = () => {
+    console.log('write', contract, chain)
     write?.();
   }
-
-  console.log('mumbai deploy', contract);
+  
+  console.log('chain', chain, 'chains', chain, 'contract', contract);
 
   return (
     <>
@@ -40,14 +38,21 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Connect Your Wallet to get started.&nbsp;
-          </p>
-        </div>
-
+        {
+          chain ?
+          ''
+          :
+          <div className={styles.description}>
+            <p>
+              Connect Your Wallet to get started.&nbsp;
+            </p>
+          </div>
+        }
+        
         <div className={styles.center}>
           Deploy Your Supertoken
+
+          <DeploySupertoken />
 
           <button onClick={deploySupertoken}>
             Deploy Supertoken

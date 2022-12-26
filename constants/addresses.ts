@@ -15,3 +15,10 @@ export const supertoken_factory_mumbai_proxy: string = '0x200657E2f123761662567A
 export const supertoken_factory_optimism_goerli_proxy: string = '0x9aCc39d15e3f168c111a1D4F80271a9E526c9a9F';
 export const supertoken_factory_arbitrum_goerli_proxy: string = '0x9aCc39d15e3f168c111a1D4F80271a9E526c9a9F';
 export const supertoken_factory_avalanche_fuji_proxy: string = '0xA25dbEa94C5824892006b30a629213E7Bf238624';
+
+export const contractMap: { [key: number]: string } = {
+  1: supertoken_factory_mainnet_proxy,
+  10: supertoken_factory_arbitrum_proxy,
+  137: supertoken_factory_polygon_proxy,
+  42161: supertoken_factory_arbitrum_proxy,
+}
