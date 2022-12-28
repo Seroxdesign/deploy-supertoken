@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import styles from './styles.module.css';
 
 export default function DeploySupertoken(props: any) {
+
+  const { tokenAddress, name, symbol, setToken } = props
+
+  console.log(tokenAddress, setToken);
+
   return (
     <form className={styles.form}>
       <h1
@@ -11,9 +16,9 @@ export default function DeploySupertoken(props: any) {
       <div className={styles.input_container}>
         <label className={styles.label}>Token Contract Address</label>
         <input
-          type="text" 
-          value={props.tokenAddress}
-          onChange={(e) => props.setToken(e.target.value)}
+          type="text"
+          value={tokenAddress}
+          onChange={(e) => setToken(e.target.value)}
           className={styles.input}
         />
       </div>

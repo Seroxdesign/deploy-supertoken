@@ -14,11 +14,14 @@ export default function Home() {
 
   const [contract, setContract] = useState<string | undefined>();
   const [chainId, setChainId] = useState<number | undefined>();
-  const [erc20TokenAddress, setAddress] = useState<string | undefined>('');
-  const [name, setName] = useState<string | undefined>();
-  const [symbol, setSymbol] = useState<string | undefined>();
+  const [erc20TokenAddress, setAddress] = useState<string>('');
+  const [name, setName] = useState<string | undefined>('');
+  const [symbol, setSymbol] = useState<string | undefined>('');
 
   useEffect(() => {
+    if (!chain) {
+      return;
+    }
     const contractAddress = getNetworkContract(chain?.id!);
     setChainId(chain?.id!);
     setContract(contractAddress);
@@ -32,17 +35,15 @@ export default function Home() {
   })
 
   const { data, isLoading, isSuccess, write } = useContractWrite(config)
-  const token = useToken({
-    //@ts-ignore
-    address: erc20TokenAddress!,
-  })
 
   const deploySupertoken = () => {
     console.log('write', contract, chain)
     write?.();
   }
-  
-  console.log('chain', chain, 'chains', chain, 'contract', contract, 'token', token?.data);
+
+  const setTokenHandler = (address: string) => {
+    setAddress(address);
+  }
 
   return (
     <>
@@ -60,7 +61,7 @@ export default function Home() {
               tokenAddress={erc20TokenAddress}
               name={name}
               symbol={symbol}
-              setToken={setAddress}
+              setToken={setTokenHandler}
             />
             :
             <div className={styles.description}>
