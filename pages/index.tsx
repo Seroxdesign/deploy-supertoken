@@ -4,7 +4,7 @@ import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
 import { getNetworkContract } from '../utils/getNetworkContract';
 import supertoken_factory from '../constants/ABIs/supertoken_factory.json';
-import { useContractWrite, usePrepareContractWrite, useNetwork } from 'wagmi'
+import { useContractWrite, usePrepareContractWrite, useNetwork, useToken } from 'wagmi'
 import DeploySupertoken from '../components/forms/DeploySupertoken';
 
 const inter = Inter({ subsets: ['latin'] })
@@ -14,7 +14,10 @@ export default function Home() {
 
   const [contract, setContract] = useState<string | undefined>();
   const [chainId, setChainId] = useState<number | undefined>();
-  
+  const [erc20TokenAddress, setAddress] = useState<string | undefined>('');
+  const [name, setName] = useState<string | undefined>();
+  const [symbol, setSymbol] = useState<string | undefined>();
+
   useEffect(() => {
     const contractAddress = getNetworkContract(chain?.id!);
     setChainId(chain?.id!);
@@ -29,13 +32,17 @@ export default function Home() {
   })
 
   const { data, isLoading, isSuccess, write } = useContractWrite(config)
+  const token = useToken({
+    //@ts-ignore
+    address: erc20TokenAddress!,
+  })
 
   const deploySupertoken = () => {
     console.log('write', contract, chain)
     write?.();
   }
   
-  console.log('chain', chain, 'chains', chain, 'contract', contract);
+  console.log('chain', chain, 'chains', chain, 'contract', contract, 'token', token?.data);
 
   return (
     <>
@@ -46,25 +53,22 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        {
-          chainId ?
-          ''
-          :
-          <div className={styles.description}>
-            <p>
-              Connect Your Wallet to get started.&nbsp;
-            </p>
-          </div>
-        }
-        
         <div className={styles.center}>
-          Deploy Your Supertoken
-
-          <DeploySupertoken />
-
-          <button onClick={deploySupertoken}>
-            Deploy Supertoken
-          </button>
+          {
+            chainId ?
+            <DeploySupertoken
+              tokenAddress={erc20TokenAddress}
+              name={name}
+              symbol={symbol}
+              setToken={setAddress}
+            />
+            :
+            <div className={styles.description}>
+              <p>
+                Connect Your Wallet to get started.&nbsp;
+              </p>
+            </div>
+          }
         </div>
 
         <div className={styles.grid}>

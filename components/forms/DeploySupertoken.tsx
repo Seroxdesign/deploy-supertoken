@@ -1,30 +1,44 @@
 import React, { useState } from 'react';
+import styles from './styles.module.css';
 
-export default function DeploySupertoken() {
+export default function DeploySupertoken(props: any) {
   return (
-    <form
-      style={{
-        padding: '1em',
-        backgroundColor: '#303030',
-        height: '50vh'
-      }}
-    >
-      <h3>Deploy Supertoken</h3>
+    <form className={styles.form}>
+      <h1
+        style={{marginBottom: '2rem', textAlign: 'center'}}
+      >Deploy Supertoken</h1>
 
-      <div>
-        <label>Token Contract Address</label>
-        <input type="text" value="supetoken" onChange={(e) => {console.log('e', e)}}/>
+      <div className={styles.input_container}>
+        <label className={styles.label}>Token Contract Address</label>
+        <input
+          type="text" 
+          value={props.tokenAddress}
+          onChange={(e) => props.setToken(e.target.value)}
+          className={styles.input}
+        />
       </div>
-      <div>
-        <label>Token Name</label>
-        <input type="text" value="supetoken" onChange={(e) => {console.log('e', e)}}/>
+      <div className={styles.input_container}>
+        <label className={styles.label}>Token Name</label>
+        <input
+          type="text" 
+          value="supetoken"
+          onChange={(e) => {console.log('e', e)}}
+          className={styles.input}
+        />
       </div>
-      <div>
-        <label>Token Symbol</label>
-        <input type="text" value="supetoken" onChange={(e) => {console.log('e', e)}}/>
+      <div className={styles.input_container}>
+        <label className={styles.label}>Token Symbol</label>
+        <input
+          type="text" 
+          value="supetoken"
+          onChange={(e) => {console.log('e', e)}}
+          className={styles.input}
+        />
       </div>
 
-      <input type="submit"/>
+      <button className={styles.submit}>
+        Deploy Supertoken
+      </button>
     </form>
   )
 }
