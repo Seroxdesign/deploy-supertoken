@@ -7,7 +7,7 @@ export function Layout({Component}: any) {
       <header
         style={{
           padding: '1em',
-          borderBottom: '3px solid lightgray',
+          borderBottom: '3px solid #30303030',
           display: 'flex',
           justifyContent: 'right'
         }}
