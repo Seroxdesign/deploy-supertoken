@@ -12,23 +12,23 @@ interface DataType {
 
 const columns: ColumnsType<DataType> = [
   {
-    title: 'ERC20 Token Name',
+    title: 'Super Token Name',
     dataIndex: 'name',
     key: 'name',
     render: (text) => <p>{text}</p>,
   },
   {
-    title: 'ERC20 Token Symbol',
+    title: 'Super Token Symbol',
     dataIndex: 'symbol',
     key: 'symbol',
   },
   {
-    title: 'ERC20 Token Address',
+    title: 'Super Token Address',
     dataIndex: 'address',
     key: 'address',
   },
 ];
 
-const DataDisplay: React.FC<{key: string, name: string, symbol: string, address: string}> = ({key, name, symbol, address}) => <Table columns={columns} dataSource={[{key, name, symbol, address}]} />;
+const SupertokenDataDisplay: React.FC<{key: string, name: string, symbol: string, address: string}> = ({key, name, symbol, address}) => <Table columns={columns} dataSource={[{key, name, symbol, address}]} />;
 
-export default DataDisplay;
+export default SupertokenDataDisplay;

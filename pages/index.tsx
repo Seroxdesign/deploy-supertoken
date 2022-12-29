@@ -4,8 +4,10 @@ import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
 import { getNetworkContract } from '../utils/getNetworkContract';
 import supertoken_factory from '../constants/ABIs/supertoken_factory.json';
-import { useContractWrite, usePrepareContractWrite, useNetwork, useToken } from 'wagmi'
+import { useContractWrite, usePrepareContractWrite, useNetwork, useToken, useWaitForTransaction } from 'wagmi'
 import DeploySupertoken from '../components/forms/DeploySupertoken';
+import Success from '../components/forms/Success';
+import Fail from '../components/forms/Fail';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,20 +19,38 @@ export default function Home() {
   const [erc20TokenAddress, setAddress] = useState<string | undefined>('');
   const [name, setName] = useState<string | undefined>();
   const [symbol, setSymbol] = useState<string | undefined>();
+  
+  const [transactionStatus, setTransactionStatus] = useState<string>('0');
 
-  const { config, error, isError } = usePrepareContractWrite({
+  const { config } = usePrepareContractWrite({
     address: contract,
     abi: supertoken_factory,
     functionName: 'createERC20Wrapper',
-    args: [erc20TokenAddress, 1, name, symbol],
+    args: [erc20TokenAddress!, 1, name!, symbol!],
   })
 
-  const { data, isLoading, isSuccess, write } = useContractWrite(config);
+  const { data, write } = useContractWrite({
+    ...config,
+  });
+ 
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+  })
+
+  console.log('tx data', data)
 
   const token = useToken({
     //@ts-ignore
     address: erc20TokenAddress!,
   })
+
+  useEffect(() => {
+    console.log('isSuccess', isSuccess);
+    if (isSuccess) {
+      setTransactionStatus('2')
+    }
+    console.log('tr', transactionStatus);
+  }, [isSuccess])
 
   useEffect(() => {
     const contractAddress = getNetworkContract(chain?.id!);
@@ -47,17 +67,14 @@ export default function Home() {
   }, [token])
 
 
-  const deploySupertoken = (e: Event) => {
+  const deploySupertoken = async () => {
     if (!symbol || !name || !erc20TokenAddress) {
       console.log('Please fill out form');
       return;
     }
-    write?.();
+    const tx = await write?.();
   }
   
-  console.log('chain', chain, 'chains', chain, 'contract', contract, 'token', token?.data);
-
-  console.log('name', name, 'symbol', symbol);
 
   return (
     <>
@@ -68,10 +85,39 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
+
+        {
+          transactionStatus === '1' ? 
+          <div className={styles.popup_wrapper}>
+            <div className={styles.popup}>
+              <Fail message=''/>
+            </div>
+          </div>
+          :
+          ''
+        }
+
+        {
+          transactionStatus === '2' ? 
+          <div className={styles.popup_wrapper}>
+            <div className={styles.popup}>
+              <Success message={JSON.stringify(data)} link='' address=''/>
+            </div>
+          </div>
+          :
+          ''
+        }
+
         <div className={styles.center}>
           {
             chainId ?
             <>
+              <h1
+                style={{
+                  fontFamily: 'arial',
+                  marginBottom: '1em'
+                }}
+              >Deploy Supertoken</h1>
               <DeploySupertoken
                 //@ts-ignore
                 tokenAddress={erc20TokenAddress}
@@ -79,6 +125,9 @@ export default function Home() {
                 symbol={symbol}
                 setToken={setAddress}
                 deploySupertoken={deploySupertoken}
+                tokenData={token?.data!}
+                networkId={chainId}
+                isLoading={isLoading}
               />
             </>
             :

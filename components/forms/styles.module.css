@@ -1,6 +1,6 @@
 .form{
   padding: 2em;
-  background-color: #515151;
+  background-color: #303030;
   border-radius: 12px;
   width: 700px;
   height: 100%;
@@ -15,14 +15,16 @@
 }
 
 .label{
-  font-size: larger;
-  margin-bottom: 0.6rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: white;
 }
 
 .input{
   height: 5vh;
   font-size: larger;
   width: 100%;
+  margin-top: 1em;
 }
 
 .submit{
