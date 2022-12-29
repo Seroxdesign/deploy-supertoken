@@ -7,7 +7,7 @@ import styles from './styles.module.css';
 
 const DeploySupertoken: React.FC = (props: any) => {
 
-  const { name, symbol, tokenAddress, setToken, deploySupertoken, tokenData, isLoading } = props;
+  const { name, symbol, tokenAddress, setToken, deploySupertoken, tokenData, isLoading, supertoken } = props;
 
   console.log('name', name, 'symbol', symbol, 'here', 'isSuccess');
 
@@ -48,7 +48,7 @@ const DeploySupertoken: React.FC = (props: any) => {
 
           <DataDisplay key={'1'} name={tokenData?.name} symbol={tokenData?.symbol} address={tokenData?.address}/>
 
-          <SupertokenDataDisplay key={'2'} name={name} symbol={symbol} address={'Deploy Token for address'}/>
+          <SupertokenDataDisplay key={'2'} name={name} symbol={symbol} address={supertoken ? supertoken : 'Deploy Supertoken'}/>
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button type="primary" htmlType="submit" disabled={isLoading}>

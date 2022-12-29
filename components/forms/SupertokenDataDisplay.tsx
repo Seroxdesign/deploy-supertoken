@@ -26,6 +26,7 @@ const columns: ColumnsType<DataType> = [
     title: 'Super Token Address',
     dataIndex: 'address',
     key: 'address',
+    render: (text) => <a target={"_blank"} href={`https://app.superfluid.finance/token/polygon/${text}`} rel={"noreferrer"}>{text}</a>,
   },
 ];
 

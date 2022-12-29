@@ -58,7 +58,7 @@ export default function Home() {
   useEffect(() => {
     console.log('isSuccess', isSuccess);
     if (isSuccess) {
-      setTransactionStatus('2')
+      setTransactionStatus('0')
     }
     console.log('tr', transactionStatus);
   }, [isSuccess])
@@ -139,6 +139,7 @@ export default function Home() {
                 tokenData={token?.data!}
                 networkId={chainId}
                 isLoading={isLoading}
+                supertoken={supertoken}
               />
             </>
             :
