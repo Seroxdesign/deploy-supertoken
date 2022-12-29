@@ -9,7 +9,7 @@
 }
 
 .input_container{
-  display: flex;
+  display: grid;
   align-items: left;
   flex-direction: column;
   margin-top: 1em;
@@ -22,9 +22,8 @@
 
 .input{
   height: 5vh;
-  padding-left: 0.4rem;
   font-size: larger;
-  margin-bottom: 1em;
+  width: 100%;
 }
 
 .submit{

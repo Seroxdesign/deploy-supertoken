@@ -18,27 +18,41 @@ export default function Home() {
   const [name, setName] = useState<string | undefined>();
   const [symbol, setSymbol] = useState<string | undefined>();
 
+  const { config, error, isError } = usePrepareContractWrite({
+    address: contract,
+    abi: supertoken_factory,
+    functionName: 'createERC20Wrapper',
+    args: [erc20TokenAddress, 1, name, symbol],
+  })
+
+  const { data, isLoading, isSuccess, write } = useContractWrite(config);
+
+  const token = useToken({
+    //@ts-ignore
+    address: erc20TokenAddress!,
+  })
+
   useEffect(() => {
     const contractAddress = getNetworkContract(chain?.id!);
     setChainId(chain?.id!);
     setContract(contractAddress);
   }, [chain])
 
-  const { config } = usePrepareContractWrite({
-    address: contract,
-    abi: supertoken_factory,
-    functionName: 'createERC20Wrapper',
-    args: ['0xE3322702BEdaaEd36CdDAb233360B939775ae5f1', 1, 'Super Tellor Tribute', 'TRBx'],
-  })
+  useEffect(() => {
+    if (!token.data) {
+      return;
+    }
+    setName(`Super ${token.data?.name}`);
+    setSymbol(`${token.data?.symbol}x`);
+  }, [token])
 
-  const { data, isLoading, isSuccess, write } = useContractWrite(config)
-  const token = useToken({
-    //@ts-ignore
-    address: erc20TokenAddress!,
-  })
 
-  const deploySupertoken = () => {
-    console.log('write', contract, chain)
+  const deploySupertoken = (e: Event) => {
+    e.preventDefault();
+    if (!symbol || !name || !erc20TokenAddress) {
+      console.log('Please fill out form');
+      return;
+    }
     write?.();
   }
   
@@ -56,12 +70,15 @@ export default function Home() {
         <div className={styles.center}>
           {
             chainId ?
-            <DeploySupertoken
-              tokenAddress={erc20TokenAddress}
-              name={name}
-              symbol={symbol}
-              setToken={setAddress}
-            />
+            <>
+              <DeploySupertoken
+                tokenAddress={erc20TokenAddress}
+                name={name}
+                symbol={symbol}
+                setToken={setAddress}
+                deploySupertoken={deploySupertoken}
+              />
+            </>
             :
             <div className={styles.description}>
               <p>
