@@ -38,11 +38,11 @@ export default function Home() {
     hash: data?.hash,
     onSettled(data, error) {
       const response = data ? data.logs[4]?.topics : []
-      console.log("Settled", response[2])
+      console.log("Settled", response[1])
       const beginIndex = 2;
       const endIndex = 26;
-      const supertokenAddress = response[2]
-      const S = supertokenAddress!.replace(supertokenAddress!.substring(beginIndex, endIndex), "");
+      const supertokenAddress = response[1];
+      const S = supertokenAddress?.replace(supertokenAddress?.substring(beginIndex, endIndex), "");
       console.log('Settled', S);
       setSupertoken(S);
   }
