@@ -48,7 +48,6 @@ export default function Home() {
 
 
   const deploySupertoken = (e: Event) => {
-    e.preventDefault();
     if (!symbol || !name || !erc20TokenAddress) {
       console.log('Please fill out form');
       return;
@@ -57,6 +56,8 @@ export default function Home() {
   }
   
   console.log('chain', chain, 'chains', chain, 'contract', contract, 'token', token?.data);
+
+  console.log('name', name, 'symbol', symbol);
 
   return (
     <>
@@ -72,6 +73,7 @@ export default function Home() {
             chainId ?
             <>
               <DeploySupertoken
+                //@ts-ignore
                 tokenAddress={erc20TokenAddress}
                 name={name}
                 symbol={symbol}

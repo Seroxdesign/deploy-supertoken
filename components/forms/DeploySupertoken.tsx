@@ -1,48 +1,56 @@
 import React, { useState } from 'react';
+import { Button, Form, Input } from 'antd';
+import DataDisplay from './DataDisplay';
 import styles from './styles.module.css';
 
-export default function DeploySupertoken(props: any) {
+const DeploySupertoken: React.FC = (props: any) => {
 
   const { name, symbol, tokenAddress, setToken, deploySupertoken } = props;
 
-  return (
-    <form className={styles.form}>
-      <h1 style={{marginBottom: '2rem', textAlign: 'center'}}>
-        Deploy Supertoken
-      </h1>
+  console.log('name', name, 'symbol', symbol, 'here');
 
-      <div className={styles.input_container}>
-        <label className={styles.label}>Token Contract Address</label>
-        <input
+  const onFinish = (e: Event) => {
+    deploySupertoken(e)
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log('Failed:', errorInfo);
+  };
+
+  return (
+    <Form
+      name="basic"
+      labelCol={{ span: 8 }}
+      wrapperCol={{ span: 16 }}
+      initialValues={{ remember: true }}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      autoComplete="off"
+      className={styles.form}
+    >
+      
+      <Form.Item
+        label="ERC20 Token Address"
+        name="token"
+        rules={[{ required: true, message: '' }]}
+      >
+        <Input
           type="text" 
           value={tokenAddress}
           onChange={(e) => setToken(e.target.value)}
           className={styles.input}
         />
-      </div>
-      <div className={styles.input_container}>
-        <label className={styles.label}>Token Name</label>
-        <input
-          autoFocus
-          type="text"
-          value={name}
-          onChange={(e) => {console.log('e', e)}}
-          className={styles.input}
-        />
-      </div>
-      <div className={styles.input_container}>
-        <label className={styles.label}>Token Symbol</label>
-        <input
-          type="text" 
-          value={symbol}
-          onChange={(e) => {console.log('e', e)}}
-          className={styles.input}
-        />
-      </div>
+      </Form.Item>
 
-      <button className={styles.submit} onClick={(e) => deploySupertoken(e)}>
-        Deploy Supertoken
-      </button>
-    </form>
-  )
-}
+      <DataDisplay />
+
+      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <Button type="primary" htmlType="submit">
+          Deploy Supertoken
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
+
+export default DeploySupertoken;
