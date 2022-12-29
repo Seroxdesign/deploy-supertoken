@@ -19,6 +19,7 @@ export default function Home() {
   const [erc20TokenAddress, setAddress] = useState<string | undefined>('');
   const [name, setName] = useState<string | undefined>();
   const [symbol, setSymbol] = useState<string | undefined>();
+  const [supertoken, setSupertoken] = useState<string>('');
   
   const [transactionStatus, setTransactionStatus] = useState<string>('0');
 
@@ -35,6 +36,16 @@ export default function Home() {
  
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: data?.hash,
+    onSettled(data, error) {
+      const response = data ? data.logs[4]?.topics : []
+      console.log("Settled", response[2])
+      const beginIndex = 2;
+      const endIndex = 26;
+      const supertokenAddress = response[2]
+      const S = supertokenAddress!.replace(supertokenAddress!.substring(beginIndex, endIndex), "");
+      console.log('Settled', S);
+      setSupertoken(S);
+  }
   })
 
   console.log('tx data', data)
