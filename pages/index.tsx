@@ -136,7 +136,7 @@ export default function Home() {
                 symbol={symbol}
                 setToken={setAddress}
                 deploySupertoken={deploySupertoken}
-                tokenData={token?.data!}
+                tokenData={token.data}
                 networkId={chainId}
                 isLoading={isLoading}
                 supertoken={supertoken}

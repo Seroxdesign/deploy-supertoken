@@ -31,12 +31,12 @@ const DeploySupertoken: React.FC = (props: any) => {
           autoComplete="off"
           className={styles.form}
         >
-          
+         
+          <label className={styles.label}>ERC20 TOKEN ADDRESS</label> 
           <Form.Item
             label=""
             name="token"
           >
-            <label className={styles.label}>ERC20 TOKEN ADDRESS</label>
             <Input
               placeholder='Insert ERC20 token Address'
               type="text" 
@@ -44,14 +44,19 @@ const DeploySupertoken: React.FC = (props: any) => {
               onChange={(e) => setToken(e.target.value)}
               className={styles.input}
             />
+
           </Form.Item>
 
-          <DataDisplay key={'1'} name={tokenData?.name} symbol={tokenData?.symbol} address={tokenData?.address}/>
+          {
+            tokenData && <DataDisplay key={'1'} name={tokenData?.name} symbol={tokenData?.symbol} address={tokenData?.address}/>
+          }
 
-          <SupertokenDataDisplay key={'2'} name={name} symbol={symbol} address={supertoken ? supertoken : 'Deploy Supertoken'}/>
+          {
+            name && <SupertokenDataDisplay key={'2'} name={name} symbol={symbol} address={supertoken ? supertoken : 'Deploy Supertoken'}/>
+          }
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit" disabled={isLoading}>
+          <Button type="primary" htmlType="submit" disabled={isLoading}>
               {
                 isLoading ? 'loading' : 'Deploy Supertoken'
               }

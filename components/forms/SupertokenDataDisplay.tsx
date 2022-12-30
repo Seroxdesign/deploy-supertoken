@@ -30,6 +30,12 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const SupertokenDataDisplay: React.FC<{key: string, name: string, symbol: string, address: string}> = ({key, name, symbol, address}) => <Table columns={columns} dataSource={[{key, name, symbol, address}]} />;
+const SupertokenDataDisplay: React.FC<{key: string, name: string, symbol: string, address: string}> = ({key, name, symbol, address}) => 
+  <Table
+    style={{marginBottom: '2em'}}
+    pagination={false}
+    columns={columns}
+    dataSource={[{key, name, symbol, address}]}
+  />;
 
 export default SupertokenDataDisplay;

@@ -29,6 +29,6 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const DataDisplay: React.FC<{key: string, name: string, symbol: string, address: string}> = ({key, name, symbol, address}) => <Table columns={columns} dataSource={[{key, name, symbol, address}]} />;
+const DataDisplay: React.FC<{key: string, name: string, symbol: string, address: string}> = ({key, name, symbol, address}) => <Table pagination={false} columns={columns} dataSource={[{key, name, symbol, address}]} />;
 
 export default DataDisplay;
