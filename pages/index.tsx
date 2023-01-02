@@ -2,30 +2,61 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head'
 import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
-import { getNetworkContract } from '../utils/getNetworkContract';
+import { getNetworkContract, getTokenLink, getTransactionLink } from '../utils';
 import supertoken_factory from '../constants/ABIs/supertoken_factory.json';
-import { useContractWrite, usePrepareContractWrite, useNetwork, useToken } from 'wagmi'
+import { useContractWrite, usePrepareContractWrite, useNetwork, useToken, useWaitForTransaction } from 'wagmi'
 import DeploySupertoken from '../components/forms/DeploySupertoken';
+import Success from '../components/forms/Success';
+import Fail from '../components/forms/Fail';
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const { chain, chains } = useNetwork()
 
+  console.log('chains', chains)
+
   const [contract, setContract] = useState<string | undefined>();
   const [chainId, setChainId] = useState<number | undefined>();
   const [erc20TokenAddress, setAddress] = useState<string | undefined>('');
   const [name, setName] = useState<string | undefined>();
   const [symbol, setSymbol] = useState<string | undefined>();
+  const [supertoken, setSupertoken] = useState<string>('');
+  const [transactionStatus, setTransactionStatus] = useState<string>('1');
+  const [tokenLink, setTokenLink] = useState('');
+  const [txLink, setTxLink] = useState('');
 
-  const { config, error, isError } = usePrepareContractWrite({
+  const { config } = usePrepareContractWrite({
     address: contract,
     abi: supertoken_factory,
     functionName: 'createERC20Wrapper',
-    args: [erc20TokenAddress, 1, name, symbol],
+    args: [erc20TokenAddress!, 1, name!, symbol!],
   })
 
-  const { data, isLoading, isSuccess, write } = useContractWrite(config);
+  const { data, write, error } = useContractWrite({
+    ...config,
+  });
+ 
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+    onSettled(data, error) {
+      const response = data ? data.logs[4]?.topics : []
+      const beginIndex = 2;
+      const endIndex = 26;
+      const supertokenAddress = response[1];
+      const S = supertokenAddress?.replace(supertokenAddress?.substring(beginIndex, endIndex), "");
+      const tx = getTransactionLink(chainId!, data?.transactionHash!)
+      const link = getTokenLink(chainId!, S);
+      setSupertoken(S);
+      setTokenLink(link);
+      setTxLink(tx);
+      setTransactionStatus('2');
+  }
+  })
+
+  const handleClose = () => {
+    setTransactionStatus('0');
+  }
 
   const token = useToken({
     //@ts-ignore
@@ -47,16 +78,15 @@ export default function Home() {
   }, [token])
 
 
-  const deploySupertoken = (e: Event) => {
-    e.preventDefault();
+  const deploySupertoken = async () => {
     if (!symbol || !name || !erc20TokenAddress) {
       console.log('Please fill out form');
       return;
     }
-    write?.();
+    const tx = write?.();
+    console.log('hash?', tx)
   }
   
-  console.log('chain', chain, 'chains', chain, 'contract', contract, 'token', token?.data);
 
   return (
     <>
@@ -67,16 +97,46 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
+
+        {
+          transactionStatus === '1' ? 
+            <div className={styles.popup}>
+              <Fail onClose={handleClose}/>
+            </div>
+          :
+          ''
+        }
+
+        {
+          transactionStatus === '2' ? 
+            <div className={styles.popup}>
+              <Success message={JSON.stringify(data)} link={txLink} address={tokenLink} onClose={handleClose}/>
+            </div>
+          :
+          ''
+        }
+
         <div className={styles.center}>
           {
             chainId ?
             <>
+              <h1
+                style={{
+                  fontFamily: 'arial',
+                  marginBottom: '1em'
+                }}
+              >Deploy Supertoken <b>({chain?.name})</b></h1>
               <DeploySupertoken
+                //@ts-ignore
                 tokenAddress={erc20TokenAddress}
                 name={name}
                 symbol={symbol}
                 setToken={setAddress}
                 deploySupertoken={deploySupertoken}
+                tokenData={token.data}
+                networkId={chainId}
+                isLoading={isLoading}
+                supertoken={supertoken}
               />
             </>
             :
@@ -90,7 +150,7 @@ export default function Home() {
 
         <div className={styles.grid}>
           <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+            href="https://docs.superfluid.finance/superfluid/developers/super-tokens/deployment"
             className={styles.card}
             target="_blank"
             rel="noopener noreferrer"
@@ -104,7 +164,7 @@ export default function Home() {
           </a>
 
           <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+            href="https://docs.superfluid.finance/superfluid/protocol-overview/glossary-of-terms"
             className={styles.card}
             target="_blank"
             rel="noopener noreferrer"
@@ -118,30 +178,30 @@ export default function Home() {
           </a>
 
           <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+            href="https://blog.serotonindesigns.com/about"
             className={styles.card}
             target="_blank"
             rel="noopener noreferrer"
           >
             <h2 className={inter.className}>
-              Support <span>-&gt;</span>
+              Developer <span>-&gt;</span>
             </h2>
             <p className={inter.className}>
-              Contact the community for support
+              Contact the dev for support
             </p>
           </a>
 
           <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+            href="https://discord.gg/Y92TVYtek2"
             className={styles.card}
             target="_blank"
             rel="noopener noreferrer"
           >
             <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
+              Discord <span>-&gt;</span>
             </h2>
             <p className={inter.className}>
-              Instantly deploy your Supertoken.
+              Join Our Community
             </p>
           </a>
         </div>

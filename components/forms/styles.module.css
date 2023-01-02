@@ -1,43 +1,51 @@
 .form{
   padding: 2em;
   background-color: #303030;
-  background: linear-gradient(#161616, #000000);
   border-radius: 12px;
-  width: 400px;
+  width: 560px;
   height: 100%;
   font-family: Arial, Helvetica, sans-serif;
 }
 
 .input_container{
-  display: grid;
+  display: flex;
   align-items: left;
   flex-direction: column;
   margin-top: 1em;
 }
 
 .label{
-  font-size: larger;
-  margin-bottom: 0.6rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: white;
 }
 
 .input{
   height: 5vh;
   font-size: larger;
-  width: 100%;
+  width: 330px;
 }
 
 .submit{
   border-radius: 12px;
   background-color: rgb(19, 82, 172);
   height: 5vh;
-  margin-left: 20%;
+  margin-left: 30%;
   width: 60%;
   font-size: large;
   cursor: pointer;
   border: none;
-  margin-top: 2em;
 }
 
 .submit:hover{
   background-color: rgb(10, 145, 118);
+}
+
+.deploy{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 500px;
+  margin-top: 1em;
 }
