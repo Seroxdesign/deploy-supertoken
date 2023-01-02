@@ -1,18 +1,31 @@
 import React from 'react';
-import { Button, Result } from 'antd';
 
-const Fail: React.FC<{message: string}> = () => (
-  <Result
-    status="error"
-    title="Successfully Purchased Cloud Server ECS!"
-    subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
-    extra={[
-      <Button type="primary" key="console">
-        Go Console
-      </Button>,
-      <Button key="buy">Buy Again</Button>,
-    ]}
-  />
+const Fail: React.FC<{onClose: () => void}> = ({ onClose }) => (
+  <div
+    style={{
+      backgroundColor: '#303030',
+      width: '100%',
+      borderRadius: '12px',
+      padding: '1em',
+      fontFamily: 'arial',
+    }}
+  >
+    <h2>Transaction Failed</h2>
+
+    <button
+      onClick={onClose}
+      style={{
+        height: '5vh',
+        width: '100px',
+        backgroundColor: 'black',
+        border: 'none',
+        borderRadius: '12px',
+        marginTop: '1em'
+      }}
+    >
+      Close
+    </button>
+  </div>
 );
 
 export default Fail;

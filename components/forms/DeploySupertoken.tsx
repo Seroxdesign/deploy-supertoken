@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Button, Form, Input } from 'antd';
 import DataDisplay from './DataDisplay';
 import SupertokenDataDisplay from './SupertokenDataDisplay';
-import { getLink } from '../../utils/getLinkAddress';
 import styles from './styles.module.css';
 
 const DeploySupertoken: React.FC = (props: any) => {
 
   const { name, symbol, tokenAddress, setToken, deploySupertoken, tokenData, isLoading, supertoken } = props;
-
-  console.log('name', name, 'symbol', symbol, 'here', 'isSuccess');
 
   const onFinish = (e: Event) => {
     deploySupertoken(e)
@@ -37,13 +34,22 @@ const DeploySupertoken: React.FC = (props: any) => {
             label=""
             name="token"
           >
-            <Input
-              placeholder='Insert ERC20 token Address'
-              type="text" 
-              value={tokenAddress}
-              onChange={(e) => setToken(e.target.value)}
-              className={styles.input}
-            />
+            <div
+              className={styles.deploy}
+            >
+              <Input
+                placeholder='Insert ERC20 token Address'
+                type="text" 
+                value={tokenAddress}
+                onChange={(e) => setToken(e.target.value)}
+                className={styles.input}
+              />
+              <Button type="primary" htmlType="submit" disabled={isLoading}>
+                {
+                  isLoading ? 'loading' : 'Deploy Supertoken'
+                }
+              </Button>
+            </div>
 
           </Form.Item>
 
@@ -56,11 +62,7 @@ const DeploySupertoken: React.FC = (props: any) => {
           }
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit" disabled={isLoading}>
-              {
-                isLoading ? 'loading' : 'Deploy Supertoken'
-              }
-            </Button>
+   
           </Form.Item>
         </Form>
 

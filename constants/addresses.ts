@@ -6,7 +6,7 @@ export const supertoken_factory_gnosis_proxy: string = '0x23410e2659380784498509
 export const supertoken_factory_optimism_proxy: string = '0x8276469A443D5C6B7146BED45e2abCaD3B6adad9';
 export const supertoken_factory_arbitrum_proxy: string = '0x1C21Ead77fd45C84a4c916Db7A6635D0C6FF09D6';
 export const supertoken_factory_avalanche_proxy: string = '0x464AADdBB2B80f3Cb666522EB7381bE610F638b4';
-export const supertoken_factory_bnb_proxy: string = '0x8bde47397301F0Cd31b9000032fD517a39c946Eb';
+export const supertoken_factory_bsc_proxy: string = '0x8bde47397301F0Cd31b9000032fD517a39c946Eb';
 
 // Testnet proxy contract addresses for supertoken factory
 
@@ -17,8 +17,22 @@ export const supertoken_factory_arbitrum_goerli_proxy: string = '0x9aCc39d15e3f1
 export const supertoken_factory_avalanche_fuji_proxy: string = '0xA25dbEa94C5824892006b30a629213E7Bf238624';
 
 export const contractMap: { [key: number]: string } = {
+
+  //Main networks:
+
   1: supertoken_factory_mainnet_proxy,
   10: supertoken_factory_arbitrum_proxy,
+  56: supertoken_factory_bsc_proxy,
+  100: supertoken_factory_gnosis_proxy,
   137: supertoken_factory_polygon_proxy,
   42161: supertoken_factory_arbitrum_proxy,
+  43114: supertoken_factory_avalanche_proxy,
+
+  //Test networks: 
+
+  5: supertoken_factory_goerli_proxy,
+  420: supertoken_factory_optimism_goerli_proxy,
+  43113: supertoken_factory_avalanche_fuji_proxy,
+  80001: supertoken_factory_mumbai_proxy,
+  421613: supertoken_factory_arbitrum_goerli_proxy,
 }
