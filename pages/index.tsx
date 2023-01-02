@@ -22,7 +22,7 @@ export default function Home() {
   const [name, setName] = useState<string | undefined>();
   const [symbol, setSymbol] = useState<string | undefined>();
   const [supertoken, setSupertoken] = useState<string>('');
-  const [transactionStatus, setTransactionStatus] = useState<string>('1');
+  const [transactionStatus, setTransactionStatus] = useState<string>('0');
   const [tokenLink, setTokenLink] = useState('');
   const [txLink, setTxLink] = useState('');
 
