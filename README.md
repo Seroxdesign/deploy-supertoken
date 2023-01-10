@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a Next JS app that allows users to deploy supertokens from ERC20 tokens
 
-## Getting Started
+## Getting Started:
 
-First, run the development server:
+First, clone the app, install the packages and run the development server:
 
-```bash
-npm run dev
-# or
+```
+git clone
+yarn install
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Packages and Libraries:
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+- ![Wagmi](https://wagmi.sh/react/getting-started):  - Used for network connections, token data, and executing blockchain transactions. 
+- ![ConnectKit](https://docs.family.co/connectkit):  - Used to connect wallet to application. 
+- ![ANTD](https://ant.design/docs/react/introduce):  - UI library, used for tables, layout and buttons.  
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## How To Use:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+1 - Connect your wallet:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+![image](https://user-images.githubusercontent.com/69639595/211585016-24bdf0ca-e3ef-4b3f-8ea5-dd15bc343a73.png)
 
-## Learn More
+2 - Input your ERC20 token address from any network: 
 
-To learn more about Next.js, take a look at the following resources:
+![image](https://user-images.githubusercontent.com/69639595/211585152-69983c32-e845-4270-9584-54579c21b9d6.png)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3 - Tables with token data will populate, when ready click the deploy supertoken button:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+![image](https://user-images.githubusercontent.com/69639595/211585442-2d58d032-8aad-48dc-8f79-c5c565b60ae4.png)
 
-## Deploy on Vercel
+4 - When token is deployed, you can check the transaction Link, supertoken Link on your network scan and check the token on Superfluid console:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+![image](https://user-images.githubusercontent.com/69639595/211585769-415d8c0e-ae1d-40ea-8b24-83bea18bf228.png)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+5 - Check superfluid console for newly deployed token:
+
+![image](https://user-images.githubusercontent.com/69639595/211585859-063177cb-0cb5-40ef-8aec-0b2f9e824630.png)
+
