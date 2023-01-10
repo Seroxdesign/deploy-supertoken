@@ -12,9 +12,9 @@ yarn dev
 
 ## Packages and Libraries:
 
-- ![Wagmi](https://wagmi.sh/react/getting-started):  - Used for network connections, token data, and executing blockchain transactions. 
-- ![ConnectKit](https://docs.family.co/connectkit):  - Used to connect wallet to application. 
-- ![ANTD](https://ant.design/docs/react/introduce):  - UI library, used for tables, layout and buttons.  
+- [Wagmi](https://wagmi.sh/react/getting-started):  - Used for network connections, token data, and executing blockchain transactions. 
+- [ConnectKit](https://docs.family.co/connectkit):  - Used to connect wallet to application. 
+- [ANTD](https://ant.design/docs/react/introduce):  - UI library, used for tables, layout and buttons.  
 
 ## How To Use:
 
