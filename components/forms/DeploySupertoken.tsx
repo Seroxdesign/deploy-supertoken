@@ -58,7 +58,7 @@ const DeploySupertoken: React.FC = (props: any) => {
           }
 
           {
-            name && <SupertokenDataDisplay key={'2'} name={name} symbol={symbol} address={supertoken ? supertoken : 'Deploy Supertoken'}/>
+            name && <SupertokenDataDisplay key={'2'} name={name} symbol={symbol} address={supertoken ? supertoken : 'TBD'}/>
           }
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
