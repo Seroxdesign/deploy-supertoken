@@ -12,9 +12,7 @@ import Fail from '../components/forms/Fail';
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
-  const { chain, chains } = useNetwork()
-
-  console.log('chains', chains)
+  const { chain } = useNetwork()
 
   const [contract, setContract] = useState<string | undefined>();
   const [chainId, setChainId] = useState<number | undefined>();
@@ -33,16 +31,20 @@ export default function Home() {
     args: [erc20TokenAddress!, 1, name!, symbol!],
   })
 
-  const { data, write, error } = useContractWrite({
+  const { data, write } = useContractWrite({
     ...config,
   });
  
-  const { isLoading, isSuccess } = useWaitForTransaction({
+  const { isLoading } = useWaitForTransaction({
     hash: data?.hash,
-    onSettled(data, error) {
+    onSettled(data) {
+      console.log(data)
       const response = data ? data.logs[4]?.topics : []
       const beginIndex = 2;
       const endIndex = 26;
+      if (!response) {
+        return;
+      }
       const supertokenAddress = response[1];
       const S = supertokenAddress?.replace(supertokenAddress?.substring(beginIndex, endIndex), "");
       const tx = getTransactionLink(chainId!, data?.transactionHash!)
@@ -59,8 +61,7 @@ export default function Home() {
   }
 
   const token = useToken({
-    //@ts-ignore
-    address: erc20TokenAddress!,
+    address: erc20TokenAddress as `0x`,
   })
 
   useEffect(() => {
@@ -84,7 +85,6 @@ export default function Home() {
       return;
     }
     const tx = write?.();
-    console.log('hash?', tx)
   }
   
 

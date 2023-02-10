@@ -105,3 +105,26 @@ a {
     color-scheme: dark;
   }
 }
+
+.ant-table-thead .ant-table-cell {
+  background-color: #1b1b1b !important;
+  color: white !important;
+  border-bottom: none !important;
+}
+
+.ant-table-row {
+  background-color: #101010 !important;
+  color: lightgray !important;
+  border-bottom: none !important;
+}
+
+.ant-table-cell-row-hover {
+  background-color: #0e0e0e !important;
+  color: lightgray !important;
+  border-bottom: none !important;
+}
+
+.ant-input {
+  background-color: #0e0e0e !important;
+  color: lightgray !important;
+}

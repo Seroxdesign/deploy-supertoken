@@ -3,7 +3,7 @@ const scanMap: any = {
   //Mainnet scans
 
   1: 'https://etherscan.io/',
-  10: 'https://optimistic.ethereum.io/',
+  10: 'https://optimistic.etherscan.io/',
   56: 'https://bscscan.com/',
   100: 'https://gnosisscan.io/',
   137: 'https://polygonscan.com/',

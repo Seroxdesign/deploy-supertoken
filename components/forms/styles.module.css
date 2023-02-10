@@ -49,3 +49,11 @@
   width: 500px;
   margin-top: 1em;
 }
+
+.ant-table-thead .ant-table-cell {
+  background-color: #1b1b1b;
+}
+
+.test {
+  background-color: #1b1b1b !important;
+}
