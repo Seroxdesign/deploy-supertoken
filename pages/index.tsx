@@ -38,7 +38,6 @@ export default function Home() {
   const { isLoading } = useWaitForTransaction({
     hash: data?.hash,
     onSettled(data) {
-      console.log(data)
       const response = data ? data.logs[4]?.topics : []
       const beginIndex = 2;
       const endIndex = 26;
