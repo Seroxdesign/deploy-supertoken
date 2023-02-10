@@ -41,6 +41,9 @@ export default function Home() {
       const response = data ? data.logs[4]?.topics : []
       const beginIndex = 2;
       const endIndex = 26;
+      if (!response) {
+        return;
+      }
       const supertokenAddress = response[1];
       const S = supertokenAddress?.replace(supertokenAddress?.substring(beginIndex, endIndex), "");
       const tx = getTransactionLink(chainId!, data?.transactionHash!)
