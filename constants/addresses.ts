@@ -21,7 +21,7 @@ export const contractMap: { [key: number]: string } = {
   //Main networks:
 
   1: supertoken_factory_mainnet_proxy,
-  10: supertoken_factory_arbitrum_proxy,
+  10: supertoken_factory_optimism_proxy,
   56: supertoken_factory_bsc_proxy,
   100: supertoken_factory_gnosis_proxy,
   137: supertoken_factory_polygon_proxy,
