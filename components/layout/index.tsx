@@ -1,23 +1,50 @@
-import React from 'react';
-import {  ConnectKitButton } from 'connectkit';
+import { Button, Dropdown, Space } from 'antd';
+import { ConnectKitButton } from 'connectkit';
+import { useAccount, useSwitchNetwork } from 'wagmi';
 
-export function Layout({Component}: any) {
-  return (
-    <div>
-      <header
-        style={{
-          padding: '1em',
-          borderBottom: '3px solid #30303030',
-          display: 'flex',
-          justifyContent: 'right'
-        }}
-      >
-        <ConnectKitButton />
-      </header>
+export function Layout({ Component }: any) {
+	const { isConnected } = useAccount();
+	const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork();
 
-      <main>
-        {Component}
-      </main>
-    </div>
-  )
+	const items = chains.map((x) => {
+		return {
+			key: x.id,
+			label: (
+				<a onClick={() => switchNetwork?.(x.id)}>
+					{x.name} {isLoading && pendingChainId === x.id && ' (switching)'}
+				</a>
+			),
+		};
+	});
+
+	return (
+		<div>
+			<header
+				style={{
+					padding: '1em',
+					borderBottom: '3px solid #30303030',
+					display: 'flex',
+					gap: '15px',
+					alignItems: 'center',
+					justifyContent: 'right',
+				}}>
+				{isConnected && (
+					<ConnectKitButton.Custom>
+						{({ isConnected, isConnecting, show, hide, address, ensName }) => {
+							return (
+								<Dropdown menu={{ items }}>
+									<Button>
+										<Space>Switch Network</Space>
+									</Button>
+								</Dropdown>
+							);
+						}}
+					</ConnectKitButton.Custom>
+				)}
+				<ConnectKitButton />
+			</header>
+
+			<main>{Component}</main>
+		</div>
+	);
 }
