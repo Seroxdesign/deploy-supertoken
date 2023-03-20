@@ -29,17 +29,11 @@ export function Layout({ Component }: any) {
 					justifyContent: 'right',
 				}}>
 				{isConnected && (
-					<ConnectKitButton.Custom>
-						{({ isConnected, isConnecting, show, hide, address, ensName }) => {
-							return (
-								<Dropdown menu={{ items }}>
-									<Button>
-										<Space>Switch Network</Space>
-									</Button>
-								</Dropdown>
-							);
-						}}
-					</ConnectKitButton.Custom>
+					<Dropdown menu={{ items }}>
+						<Button>
+							<Space>Switch Network</Space>
+						</Button>
+					</Dropdown>
 				)}
 				<ConnectKitButton />
 			</header>
