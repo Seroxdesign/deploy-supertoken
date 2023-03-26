@@ -1,3 +1,13 @@
+/* .header {
+	padding: 1em;
+	border-bottom: 3px solid #30303030;
+	display: flex;
+	gap: 15px;
+	align-items: center;
+	justify-content: flex-end;
+  } */
+
+
 .form{
   padding: 2em;
   background-color: #303030;
@@ -60,6 +70,11 @@
 
 /* Mobile */
 @media (min-width: 360px) and (max-width: 412px) {
+  .header {
+    position: relative;
+    z-index: 1;
+  }
+  
   .form{
     width: 340px;
   }
@@ -76,6 +91,8 @@
 }
 
 @media (min-width: 414px) and (max-width: 420px){
+  
+  
   .form{
     width: 360px;
   }
