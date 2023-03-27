@@ -65,10 +65,43 @@ body {
 	background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
+header {
+	padding: 1em;
+	border-bottom: 3px solid #30303030;
+	display: flex;
+	gap: 15px;
+	align-items: center;
+	justify-content: flex-end;
+}
+
 a {
 	color: inherit;
 	text-decoration: none;
 }
+
+/* Mobile */
+@media (min-width: 360px) and (max-width: 412px) {
+	header {
+		margin-top: 1rem;
+		border-bottom:  #30303030;
+		justify-content: center;
+		position: relative;
+		z-index: 100;
+		top: 50px;
+	}
+  }
+  
+  @media (min-width: 414px) and (max-width: 420px){
+	header {
+		margin-top: 1rem;
+		border-bottom:  #30303030;
+		justify-content: center;
+		position: relative;
+		z-index: 100;
+		top: 50px;
+	}
+  
+  }
 
 @media (prefers-color-scheme: dark) {
 	html {

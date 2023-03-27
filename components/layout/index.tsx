@@ -1,6 +1,8 @@
 import { Button, Dropdown, Space } from 'antd';
 import { ConnectKitButton } from 'connectkit';
 import { useAccount, useSwitchNetwork } from 'wagmi';
+import styles from './styles.module.css';
+
 
 export function Layout({ Component }: any) {
 	const { isConnected } = useAccount();
@@ -19,26 +21,19 @@ export function Layout({ Component }: any) {
 
 	return (
 		<div>
-			<header
-				style={{
-					padding: '1em',
-					borderBottom: '3px solid #30303030',
-					display: 'flex',
-					gap: '15px',
-					alignItems: 'center',
-					justifyContent: 'right',
-				}}>
-				{isConnected && (
-					<Dropdown menu={{ items }}>
-						<Button>
-							<Space>Switch Network</Space>
-						</Button>
-					</Dropdown>
-				)}
-				<ConnectKitButton />
-			</header>
-
-			<main>{Component}</main>
+		  <header>
+			{isConnected && (
+			  <Dropdown menu={{ items }}>
+				<Button>
+				  <Space>Switch Network</Space>
+				</Button>
+			  </Dropdown>
+			)}
+			<ConnectKitButton />
+		  </header>
+	  
+		  <main>{Component}</main>
 		</div>
-	);
+	  );
+	  
 }
