@@ -57,3 +57,7 @@
 .test {
   background-color: #1b1b1b !important;
 }
+
+@media screen and (max-width: 700) {
+  
+}

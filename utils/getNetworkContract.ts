@@ -1,7 +1,7 @@
-import { contractMap } from "../constants/addresses"
+import { wrapperContractMap } from "../constants/addresses";
 
 export const getNetworkContract = (chain: number) => {
-  const contract = contractMap[chain];
+  const contract = wrapperContractMap[chain];
 
   return contract;
 }

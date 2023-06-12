@@ -9,7 +9,10 @@ export function Layout({Component}: any) {
           padding: '1em',
           borderBottom: '3px solid #30303030',
           display: 'flex',
-          justifyContent: 'right'
+          justifyContent: 'right',
+          position: 'absolute',
+          zIndex: '100',
+          width: '100vw',
         }}
       >
         <ConnectKitButton />

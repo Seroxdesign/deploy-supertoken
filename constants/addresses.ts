@@ -16,7 +16,9 @@ export const supertoken_factory_optimism_goerli_proxy: string = '0x9aCc39d15e3f1
 export const supertoken_factory_arbitrum_goerli_proxy: string = '0x9aCc39d15e3f168c111a1D4F80271a9E526c9a9F';
 export const supertoken_factory_avalanche_fuji_proxy: string = '0xA25dbEa94C5824892006b30a629213E7Bf238624';
 
-export const contractMap: { [key: number]: string } = {
+// Pure supertoken deployer
+
+export const wrapperContractMap: { [key: number]: string } = {
 
   //Main networks:
 
@@ -35,4 +37,20 @@ export const contractMap: { [key: number]: string } = {
   43113: supertoken_factory_avalanche_fuji_proxy,
   80001: supertoken_factory_mumbai_proxy,
   421613: supertoken_factory_arbitrum_goerli_proxy,
+}
+
+export const pureContractMap: { [key: number]: string } = {
+  1: '',
+  10: '',
+  56: '',
+  100: '',
+  137: '',
+  42161: '',
+  43114: '',
+
+  5: '',
+  420: '',
+  43113: '',
+  80001: '',
+  421613: '',
 }

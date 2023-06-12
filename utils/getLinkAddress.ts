@@ -1,7 +1,5 @@
 const scanMap: any = {
-
   //Mainnet scans
-
   1: 'https://etherscan.io/',
   10: 'https://optimistic.etherscan.io/',
   56: 'https://bscscan.com/',
