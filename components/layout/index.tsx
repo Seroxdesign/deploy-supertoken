@@ -17,6 +17,8 @@ export function Layout({ Component }: any) {
 							switchNetwork?.(x.id);
 						}
 					}}
+					role="button"
+					tabIndex={i}
 				>
 					{x.name} {isLoading && pendingChainId === x.id && ' (switching)'}
 				</div>
