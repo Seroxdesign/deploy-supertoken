@@ -1,26 +1,28 @@
 import { Button, Dropdown, Space } from 'antd';
 import { ConnectKitButton } from 'connectkit';
-import { useAccount, useSwitchNetwork } from 'wagmi';
+import { useAccount, useSwitchChain } from 'wagmi';
 
 export function Layout({ Component }: any) {
 	const { isConnected } = useAccount();
-	const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork();
+	const { chains, error,  switchChain } = useSwitchChain();
 
 	const items = chains.map((x: any, i: number): { key: string, label: any } => {
 		return {
 			key: x.id,
 			label: (
 				<div
-					onClick={() => switchNetwork?.(x.id)}
+					onClick={() => switchChain?.(x.id)}
 					onKeyDown={(event) => {
 						if (event.key === 'Enter' || event.key === ' ') {
-							switchNetwork?.(x.id);
+							switchChain?.(x.id);
 						}
 					}}
 					role="button"
 					tabIndex={i}
 				>
-					{x.name} {isLoading && pendingChainId === x.id && ' (switching)'}
+					{x.name} 
+					{/* TODO: bring back the loading, after v1 deprecated */}
+					{/* {isLoading && pendingChainId === x.id && ' (switching)'} */}
 				</div>
 			),
 		};
