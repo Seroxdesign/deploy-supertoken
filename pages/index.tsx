@@ -1,94 +1,122 @@
-import { useState, useEffect } from 'react';
-import Head from 'next/head'
-import { Inter } from '@next/font/google'
-import styles from '../styles/Home.module.css'
-import { getNetworkContract, getTokenLink, getTransactionLink } from '../utils';
-import supertoken_factory from '../constants/ABIs/supertoken_factory.json';
-import { useContractWrite, usePrepareContractWrite, useNetwork, useToken, useWaitForTransaction } from 'wagmi'
-import DeploySupertoken from '../components/forms/DeploySupertoken';
-import Success from '../components/forms/Success';
-import Fail from '../components/forms/Fail';
+import { useState, useEffect } from "react";
+import Head from "next/head";
+import { Inter } from "@next/font/google";
+import styles from "../styles/Home.module.css";
+import { getNetworkContract, getTokenLink, getTransactionLink } from "../utils";
+import supertoken_factory from "../constants/ABIs/supertoken_factory.json";
+import DeploySupertoken from "../components/forms/DeploySupertoken";
+import Success from "../components/forms/Success";
+import Fail from "../components/forms/Fail";
+import { useAccount, useReadContracts, useWaitForTransactionReceipt } from "wagmi";
+import { useSimulateContract, useWriteContract } from "wagmi";
+import { erc20Abi } from "viem";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const { chain } = useNetwork()
+  const { chain } = useAccount();
 
   const [contract, setContract] = useState<string | undefined>();
   const [chainId, setChainId] = useState<number | undefined>();
-  const [erc20TokenAddress, setAddress] = useState<string | undefined>('');
+  const [erc20TokenAddress, setAddress] = useState<string | undefined>("");
   const [name, setName] = useState<string | undefined>();
   const [symbol, setSymbol] = useState<string | undefined>();
-  const [supertoken, setSupertoken] = useState<string>('');
-  const [transactionStatus, setTransactionStatus] = useState<string>('0');
-  const [tokenLink, setTokenLink] = useState('');
-  const [txLink, setTxLink] = useState('');
+  const [supertoken, setSupertoken] = useState<string>("");
+  const [transactionStatus, setTransactionStatus] = useState<string>("0");
+  const [tokenLink, setTokenLink] = useState("");
+  const [txLink, setTxLink] = useState("");
 
-  const { config } = usePrepareContractWrite({
-    address: contract,
+  const { data } = useSimulateContract({
+    address: contract as `0x`,
     abi: supertoken_factory,
-    functionName: 'createERC20Wrapper',
+    functionName: "createERC20Wrapper",
     args: [erc20TokenAddress!, 1, name!, symbol!],
-  })
-
-  const { data, write } = useContractWrite({
-    ...config,
   });
- 
-  const { isLoading } = useWaitForTransaction({
-    hash: data?.hash,
-    onSettled(data) {
-      const response = data ? data.logs[4]?.topics : []
-      const beginIndex = 2;
-      const endIndex = 26;
-      if (!response) {
-        return;
-      }
-      const supertokenAddress = response[1];
-      const S = supertokenAddress?.replace(supertokenAddress?.substring(beginIndex, endIndex), "");
-      const tx = getTransactionLink(chainId!, data?.transactionHash!)
-      const link = getTokenLink(chainId!, S);
-      setSupertoken(S);
-      setTokenLink(link);
-      setTxLink(tx);
-      setTransactionStatus('2');
-  }
-  })
+
+  const { writeContract, data: hash, isPending } = useWriteContract();
+
+  const { data: dataConfirmed, } = useWaitForTransactionReceipt({
+    hash: hash,
+  });
+
+  useEffect(() => {
+    if (!dataConfirmed) {
+      return;
+    }
+    const response = dataConfirmed ? dataConfirmed.logs[4]?.topics : [];
+    const beginIndex = 2;
+    const endIndex = 26;
+    if (!response) {
+      return;
+    }
+    const supertokenAddress = response[1];
+    const S = supertokenAddress?.replace(
+      supertokenAddress?.substring(beginIndex, endIndex),
+      ""
+    );
+    const tx = getTransactionLink(chainId!, dataConfirmed?.transactionHash!);
+    const link = getTokenLink(chainId!, S);
+    setSupertoken(S);
+    setTokenLink(link);
+    setTxLink(tx);
+    setTransactionStatus("2");
+  }, [dataConfirmed]);
 
   const handleClose = () => {
-    setTransactionStatus('0');
-  }
-
-  const token = useToken({
-    address: erc20TokenAddress as `0x`,
+    setTransactionStatus("0");
+  };
+  const tokenAddress = erc20TokenAddress as `0x`;
+  const result = useReadContracts({
+    allowFailure: false,
+    contracts: [
+      {
+        address: tokenAddress,
+        abi: erc20Abi,
+        functionName: 'decimals',
+      },
+      {
+        address: tokenAddress,
+        abi: erc20Abi,
+        functionName: 'name',
+      },
+      {
+        address: tokenAddress,
+        abi: erc20Abi,
+        functionName: 'symbol',
+      },
+      {
+        address: tokenAddress,
+        abi: erc20Abi,
+        functionName: 'totalSupply',
+      },
+    ]
   })
+
 
   useEffect(() => {
     const contractAddress = getNetworkContract(chain?.id!);
     setChainId(chain?.id!);
     setContract(contractAddress);
-  }, [chain])
+  }, [chain]);
 
   useEffect(() => {
-    if (!token.data) {
+    if (!result.data) {
       return;
     }
-    setName(`Super ${token.data?.name}`);
-    setSymbol(`${token.data?.symbol}x`);
-  }, [token])
-
+    setName(`Super ${result.data[1]}`);
+    setSymbol(`${result.data[2]}x`);
+  }, [result]);
 
   const deploySupertoken = async () => {
     if (!symbol || !name || !erc20TokenAddress) {
-      console.log('Please fill out form');
+      console.log("Please fill out form");
       return;
     }
-    const tx = write?.();
-  }
-  
+    const tx = writeContract?.(data!.request);
+  };
 
   return (
-    <>
+    <div>
       <Head>
         <title>Deploy Supertoken</title>
         <meta name="description" content="Generated by create next app" />
@@ -96,55 +124,61 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
+        {transactionStatus === "1" ? (
+          <div className={styles.popup}>
+            <Fail onClose={handleClose} />
+          </div>
+        ) : (
+          ""
+        )}
 
-        {
-          transactionStatus === '1' ? 
-            <div className={styles.popup}>
-              <Fail onClose={handleClose}/>
-            </div>
-          :
-          ''
-        }
-
-        {
-          transactionStatus === '2' ? 
-            <div className={styles.popup}>
-              <Success message={JSON.stringify(data)} link={txLink} address={tokenLink} onClose={handleClose}/>
-            </div>
-          :
-          ''
-        }
+        {transactionStatus === "2" ? (
+          <div className={styles.popup}>
+            <Success
+              message={JSON.stringify(data)}
+              link={txLink}
+              address={tokenLink}
+              onClose={handleClose}
+            />
+          </div>
+        ) : (
+          ""
+        )}
 
         <div className={styles.center}>
-          {
-            chainId ?
+          {chainId ? (
             <>
               <h1
                 style={{
-                  fontFamily: 'arial',
-                  marginBottom: '1em'
+                  fontFamily: "arial",
+                  marginBottom: "1em",
                 }}
-              >Deploy Supertoken <b>({chain?.name})</b></h1>
+              >
+                Deploy Supertoken <b>({chain?.name})</b>
+              </h1>
+              {/* const { name, symbol, tokenAddress, setToken, deploySupertoken, tokenData, isLoading, supertoken } = props; */}
               <DeploySupertoken
-                //@ts-ignore
-                tokenAddress={erc20TokenAddress}
+                tokenAddress={erc20TokenAddress ?? ""}
                 name={name}
                 symbol={symbol}
                 setToken={setAddress}
                 deploySupertoken={deploySupertoken}
-                tokenData={token.data}
-                networkId={chainId}
-                isLoading={isLoading}
+                tokenData={{
+                  name: name,
+                  symbol: symbol,
+                  address: erc20TokenAddress,
+                }}
+                
+                isLoading={isPending}
                 supertoken={supertoken}
+
               />
             </>
-            :
+          ) : (
             <div className={styles.description}>
-              <p>
-                Connect Your Wallet to get started.&nbsp;
-              </p>
+              <p>Connect Your Wallet to get started.&nbsp;</p>
             </div>
-          }
+          )}
         </div>
 
         <div className={styles.grid}>
@@ -171,9 +205,7 @@ export default function Home() {
             <h2 className={inter.className}>
               Learn <span>-&gt;</span>
             </h2>
-            <p className={inter.className}>
-              Learn more about Supertokens
-            </p>
+            <p className={inter.className}>Learn more about Supertokens</p>
           </a>
 
           <a
@@ -185,9 +217,7 @@ export default function Home() {
             <h2 className={inter.className}>
               Developer <span>-&gt;</span>
             </h2>
-            <p className={inter.className}>
-              Contact the dev for support
-            </p>
+            <p className={inter.className}>Contact the dev for support</p>
           </a>
 
           <a
@@ -199,12 +229,10 @@ export default function Home() {
             <h2 className={inter.className}>
               Discord <span>-&gt;</span>
             </h2>
-            <p className={inter.className}>
-              Join Our Community
-            </p>
+            <p className={inter.className}>Join Our Community</p>
           </a>
         </div>
       </main>
-    </>
-  )
+    </div>
+  );
 }

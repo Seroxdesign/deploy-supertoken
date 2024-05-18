@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 interface DataType {
   key: string;
@@ -12,7 +12,7 @@ interface DataType {
 
 const SupertokenDataDisplay: React.FC<{key: string, name: string, symbol: string, address: string}> = ({key, name, symbol, address}) => {
 
-  const { chain } = useNetwork()
+  const { chain } = useAccount()
 
   console.log(chain)
 
@@ -34,7 +34,8 @@ const SupertokenDataDisplay: React.FC<{key: string, name: string, symbol: string
       key: 'address',
       render: (text) => text !== 'TBD' ? <a
       target={"_blank"}
-      href={`https://console.superfluid.finance/${chain?.network!}/supertokens/${text}?tab=streams`} 
+      // TODO: fix this broken link
+      href={`https://console.superfluid.finance/${chain?.name}/supertokens/${text}?tab=streams`} 
       rel={"noreferrer"}>{text}</a> : <p>TBD</p>,
     },
   ];
