@@ -1,6 +1,7 @@
 import { Button, Dropdown, Space } from 'antd';
 import { ConnectKitButton } from 'connectkit';
 import { useAccount, useSwitchChain } from 'wagmi';
+import { config } from '../../utils/config';
 
 export function Layout({ Component }: any) {
 	const { isConnected } = useAccount();
@@ -11,10 +12,12 @@ export function Layout({ Component }: any) {
 			key: x.id,
 			label: (
 				<div
-					onClick={() => switchChain?.(x.id)}
+					onClick={async () => {
+						await switchChain?.({chainId: x.id});
+					}}
 					onKeyDown={(event) => {
 						if (event.key === 'Enter' || event.key === ' ') {
-							switchChain?.(x.id);
+							switchChain?.({chainId: x.id});
 						}
 					}}
 					role="button"
